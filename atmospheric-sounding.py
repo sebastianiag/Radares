@@ -30,6 +30,41 @@ def refractivity(temp, pressure, dew_pointT):
     #return refractivity
     return (77.6/temp_K)*(pressure + (4810*Pw)/temp_K)
 
+def plot_all(numeric_data, refractivities, gradient_N):
+    heightKM = np.array([row[1]/1000.0 for row in numeric_data])
+    temperature = np.array([row[2] for row in numeric_data])
+
+    #plotting Height vs Temperature
+    plt.title("Sounding for 29-December-2014")
+    plt.scatter(temperature, heightKM)
+    plt.plot(temperature, heightKM)
+    plt.xlabel('Temperature(C)')
+    plt.ylabel('Height(km)')
+    plt.grid(True)
+    plt.savefig('height-temperature.png')
+    plt.clf()
+
+    #plotting Height vs Refractivity
+    plt.title("Sounding for 29-December-2014")
+    plt.scatter(refractivities, heightKM)
+    plt.plot(refractivities, heightKM)
+    plt.xlabel('Refractivity(N-Units)')
+    plt.ylabel('Height(km)')
+    plt.grid(True)
+    plt.savefig('height-refractivity.png')
+    plt.clf()
+    height = np.array([row[1] for row in numeric_data][:-1])
+
+
+    #plotting Height vs Gradient of Refractivity
+    plt.title("Sounding for 29-December-2014")
+    plt.scatter(gradient_N, height)
+    plt.plot(gradient_N, height)
+    plt.xlabel('gradient of Refractivity(N-Units)/km')
+    plt.ylabel('Height(m)')
+    plt.grid(True)
+    plt.savefig('height-gradient_refractivity.png')
+
 #options parser
 parser = ArgumentParser()
 parser.add_argument("--year", type=str, help="year of interest")
@@ -67,35 +102,4 @@ while i < length:
 gradient_N = np.array(gradient_N)
 
 print "plotting..."
-heightKM = np.array([row[1]/1000.0 for row in numeric_data])
-temperature = np.array([row[2] for row in numeric_data])
-#plotting Height vs Temperature
-plt.title("Sounding for 29-December-2014")
-plt.scatter(temperature, heightKM)
-plt.plot(temperature, heightKM)
-plt.xlabel('Temperature(C)')
-plt.ylabel('Height(km)')
-plt.grid(True)
-plt.savefig('height-temperature.png')
-plt.clf()
-
-#plotting Height vs Refractivity
-plt.title("Sounding for 29-December-2014")
-plt.scatter(refractivities, heightKM)
-plt.plot(refractivities, heightKM)
-plt.xlabel('Refractivity(N-Units)')
-plt.ylabel('Height(km)')
-plt.grid(True)
-plt.savefig('height-refractivity.png')
-plt.clf()
-height = np.array([row[1] for row in numeric_data][:-1])
-
-
-#plotting Height vs Gradient of Refractivity
-plt.title("Sounding for 29-December-2014")
-plt.scatter(gradient_N, height)
-plt.plot(gradient_N, height)
-plt.xlabel('gradient of Refractivity(N-Units)/km')
-plt.ylabel('Height(m)')
-plt.grid(True)
-plt.savefig('height-gradient_refractivity.png')
+plot_all(numeric_data, refractivities, gradient_N)
